@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="{% static 'weather/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast</h1>
+        <form method="get">
+            <input type="text" name="city" placeholder="Enter city name" value="{{ city }}">
+            <button type="submit">Get Forecast</button>
+        </form>
+
+        {% if error %}
+            <p style="color: red; font-weight: bold;">{{ error }}</p>
+        {% endif %}
+
+        {% if data %}
+            <h2>Weather in {{ data.city }}</h2>
+
+            <div class="current">
+                <h3>Current Weather</h3>
+                <div class="current-container">
+                    <img src="http://openweathermap.org/img/wn/{{ data.current.icon }}@2x.png" alt="{{ data.current.description }}">
+                    <div class="current-info">
+                        <p><strong>Temperature:</strong> {{ data.current.temp }}°C</p>
+                        <p><strong>Description:</strong> {{ data.current.description|title }}</p>
+                        <p><strong>Humidity:</strong> {{ data.current.humidity }}%</p>
+                        <p><strong>Wind Speed:</strong> {{ data.current.wind_speed }} m/s</p>
+                    </div>
+                </div>
+                <div class="weather-tip">
+                    <h4>AI Weather Tip</h4>
+                    <p>{{ data.tip }}</p>
+                </div>
+            </div>
+
+            <h3>5-Day Forecast</h3>
+            <div class="forecast">
+                {% for day in data.forecast %}
+                    <div class="day">
+                       
+                        <p class="date">{{ day.date }}</p>
+                        <img src="http://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="{{ day.description }}">
+                        <p>{{ day.temp }}°C</p>
+                        <p>{{ day.description|title }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
